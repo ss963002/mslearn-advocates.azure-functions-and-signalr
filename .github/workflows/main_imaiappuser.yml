@@ -24,16 +24,16 @@ jobs:
       - name: Log in to container registry
         uses: docker/login-action@v2
         with:
-          registry: mcr.microsoft.com/
-          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_05853928E1DF45F19CE4E7FC7DE9801E }}
-          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_D7DFCFB1151E4BF18A0BBBCC19BF6391 }}
+          registry: imairegistryruser.azurecr.io/
+          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_C2C68383E8F94D8993DF1EF1E1C7365D }}
+          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_F80F60FC422A4F31A517E712918CA5C4 }}
 
       - name: Build and push container image to registry
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: mcr.microsoft.com/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_05853928E1DF45F19CE4E7FC7DE9801E }}/appsvc/staticsite:${{ github.sha }}
+          tags: imairegistryruser.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_C2C68383E8F94D8993DF1EF1E1C7365D }}/webimage:${{ github.sha }}
           file: ./Dockerfile
 
   deploy:
@@ -49,9 +49,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5F46493235124934B337481F999DF67F }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_116FC79F1ED14DACA6AE61EA1828F3A4 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9DA63675C0FB444DA03D2554F2206378 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F0D5AE8FC22F4DFCB8CE78402A25EDC7 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_63BF981E44C04F549FCC2DA353F46E4C }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_3B0CF2628AEA4B5F8C33FF24E280CB61 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -59,5 +59,5 @@ jobs:
         with:
           app-name: 'imaiappuser'
           slot-name: 'Production'
-          images: 'mcr.microsoft.com/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_05853928E1DF45F19CE4E7FC7DE9801E }}/appsvc/staticsite:${{ github.sha }}'
+          images: 'imairegistryruser.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_C2C68383E8F94D8993DF1EF1E1C7365D }}/webimage:${{ github.sha }}'
           
